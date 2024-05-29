@@ -3,37 +3,41 @@ import User from '../models/User';
 import mongoose, { mongo } from 'mongoose';
 import { OAuth2Client } from 'google-auth-library';
 import config from '../config';
-import { clearImage, imagesUpload } from '../multer';
+import { clearImage, avatarsUpload } from '../multer';
 
 const usersRouter = express.Router();
 const client = new OAuth2Client(config.google.clientID);
 
-usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
-  try {
-    const user = new User({
-      email: req.body.email,
-      displayName: req.body.displayName,
-      avatar: req.file?.filename,
-      password: req.body.password,
-    });
+usersRouter.post(
+  '/',
+  avatarsUpload.single('avatar'),
+  async (req, res, next) => {
+    try {
+      const user = new User({
+        email: req.body.email,
+        displayName: req.body.displayName,
+        avatar: req.file?.filename,
+        password: req.body.password,
+      });
 
-    user.generateToken();
+      user.generateToken();
 
-    await user.save();
-    return res.send({ message: 'Successful sign up!', user });
-  } catch (error) {
-    if (req.file) {
-      clearImage(req.file.filename);
+      await user.save();
+      return res.send({ message: 'Successful sign up!', user });
+    } catch (error) {
+      if (req.file) {
+        clearImage(req.file.filename);
+      }
+      if (error instanceof mongoose.Error.ValidationError) {
+        return res.status(400).send(error);
+      }
+      if (error instanceof mongo.MongoServerError && error.code === 11000) {
+        return res.status(422).send(error);
+      }
+      next(error);
     }
-    if (error instanceof mongoose.Error.ValidationError) {
-      return res.status(400).send(error);
-    }
-    if (error instanceof mongo.MongoServerError && error.code === 11000) {
-      return res.status(422).send(error);
-    }
-    next(error);
   }
-});
+);
 
 usersRouter.post('/sessions', async (req, res, next) => {
   try {
@@ -102,7 +106,7 @@ usersRouter.post('/sessions/google', async (req, res, next) => {
     user.generateToken();
     await user.save();
 
-    return res.send({ message: 'Log in with Google succesful!', user });
+    return res.send({ message: 'Log in with Google successful!', user });
   } catch (error) {
     next(error);
   }

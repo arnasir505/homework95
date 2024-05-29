@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { HydratedDocument, Model, Schema, model } from 'mongoose';
 import { UserFields } from '../types';
 import { randomUUID } from 'crypto';
+import * as EmailValidator from 'email-validator';
 
 const SALT_WORK_FACTOR = 10;
 
@@ -16,26 +17,43 @@ const UserSchema = new Schema<UserFields, UserModel>(
   {
     email: {
       type: String,
-      required: true,
+      required: [true, 'Please enter your email address.'],
       unique: true,
-      validate: {
-        validator: async function (
-          this: HydratedDocument<UserFields>,
-          email: string
-        ): Promise<boolean> {
-          if (!this.isModified('email')) return true;
-
-          const user: HydratedDocument<UserFields> | null = await User.findOne({
-            email,
-          });
-          return !Boolean(user);
+      validate: [
+        {
+          validator: function (email: string) {
+            return EmailValidator.validate(email);
+          },
+          message: 'Please enter a valid email address.',
         },
-        message: 'This email is already taken.',
-      },
+        {
+          validator: async function (
+            this: HydratedDocument<UserFields>,
+            email: string
+          ): Promise<boolean> {
+            if (!this.isModified('email')) return true;
+
+            const user: HydratedDocument<UserFields> | null =
+              await User.findOne({
+                email,
+              });
+            return !Boolean(user);
+          },
+          message: 'This email is already taken.',
+        },
+      ],
     },
     password: {
       type: String,
-      required: true,
+      required: [true, 'Please enter a password.'],
+      validate: {
+        validator: function (password: string) {
+          if (password.length < 6) {
+            return false;
+          }
+        },
+        message: 'Your password must be at least 6 characters.',
+      },
     },
     token: {
       type: String,
@@ -49,11 +67,11 @@ const UserSchema = new Schema<UserFields, UserModel>(
     },
     displayName: {
       type: String,
-      required: true,
+      required: [true, 'Please enter your name.'],
     },
     avatar: {
       type: String,
-      required: true
+      required: [true, 'Please upload your profile picture.'],
     },
     googleID: String,
   },
