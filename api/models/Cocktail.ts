@@ -1,5 +1,5 @@
 import { Model, Schema, Types, model } from 'mongoose';
-import { CocktailFields } from '../types';
+import { CocktailFields, Ingredient } from '../types';
 import User from './User';
 
 interface CocktailMethods {
@@ -8,16 +8,23 @@ interface CocktailMethods {
 
 type CocktailModel = Model<CocktailFields, {}, CocktailMethods>;
 
+const IngredientsSubSchema = new Schema<Ingredient>({
+  name: {
+    type: String,
+    required: true,
+  },
+  amount: {
+    type: String,
+    required: true,
+  },
+});
 const CocktailSchema = new Schema<CocktailFields, CocktailModel>(
   {
     name: {
       type: String,
       required: [true, 'Please enter cocktail name.'],
     },
-    ingredients: {
-      type: [{ name: String, amount: String }],
-      required: [true, 'Please add at least 1 ingredient'],
-    },
+    ingredients: [IngredientsSubSchema],
     recipe: {
       type: String,
       required: [true, 'Please enter cocktail recipe.'],
