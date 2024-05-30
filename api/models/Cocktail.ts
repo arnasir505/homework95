@@ -24,7 +24,16 @@ const CocktailSchema = new Schema<CocktailFields, CocktailModel>(
       type: String,
       required: [true, 'Please enter cocktail name.'],
     },
-    ingredients: [IngredientsSubSchema],
+    ingredients: {
+      type: [IngredientsSubSchema],
+      required: true,
+      validate: {
+        validator: function (ingredients: Ingredient[]) {
+          if (ingredients.length === 0) return false;
+        },
+        message: 'Please add at least 1 ingredient.'
+      },
+    },
     recipe: {
       type: String,
       required: [true, 'Please enter cocktail recipe.'],

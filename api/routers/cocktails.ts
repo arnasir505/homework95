@@ -3,6 +3,7 @@ import Cocktail from '../models/Cocktail';
 import { clearImage, cocktailsUpload } from '../multer';
 import auth, { RequestWithUser } from '../middleware/auth';
 import mongoose from 'mongoose';
+import permit from '../middleware/permit';
 
 const cocktailsRouter = express.Router();
 
@@ -19,10 +20,8 @@ cocktailsRouter.post(
         image: req.file?.filename,
         user: req.user?._id,
       });
-
       await cocktail.save();
-
-      return res.send(cocktail);
+      return res.status(201).send(cocktail);
     } catch (e) {
       if (req.file) {
         clearImage(req.file.filename);
@@ -35,9 +34,76 @@ cocktailsRouter.post(
   },
 );
 
-cocktailsRouter.get('/', async (req, res) => {
-  const cocktails = await Cocktail.find();
-  return res.send(cocktails);
+cocktailsRouter.get('/', async (_req, res, next) => {
+  try {
+    const cocktails = await Cocktail.find({ isPublished: true });
+    return res.send(cocktails);
+  } catch (e) {
+    next(e);
+  }
 });
+
+cocktailsRouter.get(
+  '/admin',
+  auth,
+  permit('admin'),
+  async (_req, res, next) => {
+    try {
+      const cocktails = await Cocktail.find();
+      return res.send(cocktails);
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+cocktailsRouter.get('/:id', async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const cocktail = await Cocktail.findById(id);
+    return res.send(cocktail);
+  } catch (e) {
+    next(e);
+  }
+});
+
+cocktailsRouter.patch(
+  '/:id/togglePublished',
+  auth,
+  permit('admin'),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const cocktail = await Cocktail.findById(id);
+      if (!cocktail) {
+        return res.status(404).send({ error: 'Nof Found.' });
+      }
+      cocktail.togglePublished();
+      await cocktail.save();
+      return res.send(cocktail);
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+cocktailsRouter.delete(
+  '/:id',
+  auth,
+  permit('admin'),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const cocktail = await Cocktail.findByIdAndDelete(id);
+      if (!cocktail) {
+        return res.status(404).send({ error: 'Not Found' });
+      }
+      clearImage(cocktail.image);
+      return res.send({ message: 'Deleted' });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
 
 export default cocktailsRouter;
