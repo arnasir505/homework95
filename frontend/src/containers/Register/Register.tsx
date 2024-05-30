@@ -42,6 +42,8 @@ const Register = () => {
 
     if (files && files[0]) {
       setRegisterForm((prevState) => ({ ...prevState, avatar: files[0] }));
+    } else {
+      setRegisterForm((prevState) => ({ ...prevState, avatar: null }));
     }
   };
 

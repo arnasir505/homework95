@@ -70,7 +70,7 @@ const Login = () => {
         {error && (
           <Alert
             severity='error'
-            variant='filled'
+            variant='outlined'
             sx={{ mt: 5, width: '100%' }}
           >
             {error.error}

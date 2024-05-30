@@ -27,14 +27,13 @@ export const register = createAsyncThunk<
       formData.append('avatar', avatar);
     }
     formData.append('password', password);
-
     const response = await axiosApi.post<RegisterResponse>('/users', formData);
     return response.data.user;
   } catch (error) {
     if (
       isAxiosError(error) &&
       error.response &&
-      error.response.status === 422
+      error.response.status === 400
     ) {
       return rejectWithValue(error.response.data as ValidationError);
     }
