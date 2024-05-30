@@ -29,7 +29,7 @@ const UserSchema = new Schema<UserFields, UserModel>(
         {
           validator: async function (
             this: HydratedDocument<UserFields>,
-            email: string
+            email: string,
           ): Promise<boolean> {
             if (!this.isModified('email')) return true;
 
@@ -77,7 +77,7 @@ const UserSchema = new Schema<UserFields, UserModel>(
   },
   {
     versionKey: false,
-  }
+  },
 );
 
 UserSchema.method('checkPassword', async function (password: string) {
