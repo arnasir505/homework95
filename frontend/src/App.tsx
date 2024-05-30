@@ -1,6 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import Appbar from './components/Appbar/Appbar';
 import { Typography } from '@mui/material';
+import Register from './containers/Register/Register';
+import Login from './containers/Login/Login';
 
 const App = () => {
   return (
@@ -11,6 +13,8 @@ const App = () => {
       <main>
         <Routes>
           <Route path='/' element='Home' />
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
           <Route
             path='*'
             element={

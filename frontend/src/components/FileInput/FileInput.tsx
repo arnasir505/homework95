@@ -58,8 +58,8 @@ const FileInput: React.FC<Props> = ({ onChange, name, label, selectError }) => {
             label={label}
             value={fileName}
             onClick={activateInput}
-            error={Boolean(getFieldError('image'))}
-            helperText={getFieldError('image')}
+            error={Boolean(getFieldError(name))}
+            helperText={getFieldError(name)}
           />
         </Grid>
 

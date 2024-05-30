@@ -11,7 +11,7 @@ export interface User {
 export interface RegisterMutation {
   email: string;
   displayName: string;
-  avatar: File;
+  avatar: File | null;
   password: string;
 }
 

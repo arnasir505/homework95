@@ -23,7 +23,9 @@ export const register = createAsyncThunk<
 
     formData.append('email', email);
     formData.append('displayName', displayName);
-    formData.append('avatar', avatar);
+    if (avatar) {
+      formData.append('avatar', avatar);
+    }
     formData.append('password', password);
 
     const response = await axiosApi.post<RegisterResponse>('/users', formData);
@@ -36,7 +38,6 @@ export const register = createAsyncThunk<
     ) {
       return rejectWithValue(error.response.data as ValidationError);
     }
-
     throw error;
   }
 });
