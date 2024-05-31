@@ -1,8 +1,10 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
   Grid,
+  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
@@ -17,10 +19,8 @@ import {
 } from '../../store/cocktails/cocktailsSlice';
 import { LoadingButton } from '@mui/lab';
 import { addCocktail } from '../../store/cocktails/cocktailsThunks';
-import { useNavigate } from 'react-router-dom';
 
 const NewCocktail: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectAddCocktailError);
   const loading = useAppSelector(selectAddCocktailLoading);
@@ -30,6 +30,8 @@ const NewCocktail: React.FC = () => {
     recipe: '',
     image: null,
   });
+  const [open, setOpen] = React.useState(false);
+  const [fileName, setFileName] = useState('');
 
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -82,6 +84,7 @@ const NewCocktail: React.FC = () => {
       recipe: '',
       image: null,
     });
+    setFileName('');
   };
 
   const getFieldError = (fieldName: string) => {
@@ -96,11 +99,36 @@ const NewCocktail: React.FC = () => {
     e.preventDefault();
     await dispatch(addCocktail(cocktailForm)).unwrap();
     clearCocktailForm();
-    navigate('/');
+    setOpen(true);
   };
-  
+
+  const handleClose = (
+    _event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <Container sx={{ py: 3 }} maxWidth='md'>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity='success'
+          variant='filled'
+          sx={{ width: '100%' }}
+        >
+          Your cocktail will be reviewed by a moderator.
+        </Alert>
+      </Snackbar>
       <Typography variant='h4' sx={{ mb: 2 }}>
         Add Cocktail
       </Typography>
@@ -179,6 +207,8 @@ const NewCocktail: React.FC = () => {
               label='Image'
               onChange={fileInputChangeHandler}
               error={error}
+              fileName={fileName}
+              changeFilename={setFileName}
             />
           </Grid>
           <Grid item xs={12}>

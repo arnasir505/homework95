@@ -31,6 +31,7 @@ const Register = () => {
     avatar: null,
     password: '',
   });
+  const [fileName, setFileName] = useState('');
 
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -110,6 +111,8 @@ const Register = () => {
                 name='avatar'
                 label='Avatar'
                 error={error}
+                fileName={fileName}
+                changeFilename={setFileName}
               />
             </Grid>
             <Grid item xs={12}>

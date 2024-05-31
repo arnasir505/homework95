@@ -39,7 +39,6 @@ const UserCocktails: React.FC = () => {
   if (cocktails.length > 0 && !loading) {
     content = (
       <>
-        <Typography variant='h4'>My Cocktails</Typography>
         <Typography variant='h5' color='green' sx={{ mt: 2, mb: 1 }}>
           Published
         </Typography>
@@ -117,8 +116,19 @@ const UserCocktails: React.FC = () => {
         </Grid>
       </>
     );
+  } else if (cocktails.length === 0 && !loading) {
+    content = (
+      <Typography variant='h5' textAlign={'center'} mt={3}>
+        No cocktails yet. <Link to={'/cocktails/new'}>Add your first!</Link>
+      </Typography>
+    );
   }
-  return <Container sx={{ py: 5 }}>{content}</Container>;
+  return (
+    <Container sx={{ py: 5 }}>
+      <Typography variant='h4'>My Cocktails</Typography>
+      {content}
+    </Container>
+  );
 };
 
 export default UserCocktails;

@@ -20,7 +20,7 @@ const Cocktails: React.FC = () => {
   const dispatch = useAppDispatch();
   const cocktails = useAppSelector(selectCocktails);
   const loading = useAppSelector(selectCocktailsLoading);
-  
+
   const getCocktails = async () => {
     await dispatch(fetchCocktails());
   };
@@ -66,7 +66,7 @@ const Cocktails: React.FC = () => {
   } else if (cocktails.length === 0 && !loading) {
     content = (
       <Typography variant='h5' textAlign={'center'} mt={3}>
-        No cocktails yet.
+        No drinks yet.
       </Typography>
     );
   }

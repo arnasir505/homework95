@@ -168,6 +168,12 @@ const Admin: React.FC = () => {
         </Grid>
       </>
     );
+  } else if (cocktails.length === 0 && !loading) {
+    content = (
+      <Typography variant='h5' textAlign={'center'} mt={3}>
+        No cocktails yet. <Link to={'/cocktails/new'}>Add your first!</Link>
+      </Typography>
+    );
   }
 
   return <Container sx={{ py: 5 }}>{content}</Container>;
