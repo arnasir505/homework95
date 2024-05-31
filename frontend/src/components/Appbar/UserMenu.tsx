@@ -43,7 +43,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
               ? user.avatar
               : `${apiUrl}/${user.avatar}`
           }
-          sx={{ width: 30, height: 30, mr: 1 }}
+          sx={{ width: 35, height: 35, mr: 1 }}
           alt={user.displayName[0]}
         />
         {user.displayName}
@@ -59,6 +59,12 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           style={{ color: 'inherit', textDecoration: 'none' }}
         >
           <MenuItem>Add Cocktail</MenuItem>
+        </Link>
+        <Link
+          to='/my-cocktails'
+          style={{ color: 'inherit', textDecoration: 'none' }}
+        >
+          <MenuItem>My cocktails</MenuItem>
         </Link>
         {user.role === 'admin' && (
           <Link

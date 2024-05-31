@@ -43,21 +43,45 @@ const run = async () => {
     },
   );
 
-  await Cocktail.create({
-    name: 'Mojito',
-    ingredients: [
-      { name: 'Light rum', amount: '2-3 oz' },
-      { name: 'Lime', amount: 'juice of 1' },
-      { name: 'Sugar', amount: '2 tsp' },
-      { name: 'Mint', amount: '2-4' },
-      { name: 'Soda water', amount: '1 glass' },
-    ],
-    recipe:
-      'Muddle mint leaves with sugar and lime juice. Add a splash of soda water and fill the glass with cracked ice. Pour the rum and top with soda water. Garnish and serve with straw.',
-    image: 'fixtures/mojito.jpg',
-    user: user2._id,
-    isPublished: false,
-  });
+  await Cocktail.create(
+    {
+      name: 'Mojito',
+      ingredients: [
+        { name: 'Light rum', amount: '2-3 oz' },
+        { name: 'Lime', amount: 'juice of 1' },
+        { name: 'Sugar', amount: '2 tsp' },
+        { name: 'Mint', amount: '2-4' },
+        { name: 'Soda water', amount: '1 glass' },
+      ],
+      recipe:
+        'Muddle mint leaves with sugar and lime juice. Add a splash of soda water and fill the glass with cracked ice. Pour the rum and top with soda water. Garnish and serve with straw.',
+      image: 'fixtures/mojito.jpg',
+      user: user2._id,
+      isPublished: true,
+    },
+    {
+      name: 'Screwdriver',
+      ingredients: [
+        { name: 'Vodka', amount: '2 oz' },
+        { name: 'Orange juice', amount: 'juice of 1' },
+      ],
+      recipe: 'Mix in a highball glass with ice. Garnish and serve.',
+      image: 'fixtures/screwdriver.jpg',
+      user: user1._id,
+      isPublished: true,
+    },
+    {
+      name: "Flander's Flake-Out",
+      ingredients: [
+        { name: 'Sambuca', amount: '1/4 glass' },
+        { name: 'Sarsaparilla', amount: '3/4 glass' },
+      ],
+      recipe: "Bang 'em both in.",
+      image: 'fixtures/flander.jpg',
+      user: user2._id,
+      isPublished: false,
+    },
+  );
 
   await db.close();
 };

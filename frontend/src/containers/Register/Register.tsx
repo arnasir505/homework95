@@ -109,7 +109,7 @@ const Register = () => {
                 onChange={fileInputChangeHandler}
                 name='avatar'
                 label='Avatar'
-                selectError={selectRegisterError}
+                error={error}
               />
             </Grid>
             <Grid item xs={12}>

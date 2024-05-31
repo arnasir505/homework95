@@ -1,20 +1,17 @@
 import React, { useRef, useState } from 'react';
 import { Button, Grid, TextField } from '@mui/material';
-import { useAppSelector } from '../../app/hooks';
-import { RootState } from '../../app/store';
 import { ValidationError } from '../../types';
 
 interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
   label: string;
-  selectError: (state: RootState) => ValidationError | null;
+  error: ValidationError | null;
 }
 
-const FileInput: React.FC<Props> = ({ onChange, name, label, selectError }) => {
+const FileInput: React.FC<Props> = ({ onChange, name, label, error }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState('');
-  const error = useAppSelector(selectError);
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFileName(e.target.files[0].name);

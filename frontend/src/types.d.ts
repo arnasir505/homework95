@@ -8,6 +8,28 @@ export interface User {
   googleID?: string;
 }
 
+export interface Ingredient {
+  name: string;
+  amount: string;
+}
+
+export interface Cocktail {
+  _id: string;
+  name: string;
+  ingredients: Ingredient[];
+  recipe: string;
+  image: string;
+  user: string;
+  isPublished: boolean;
+}
+
+export interface CocktailMutation {
+  name: string;
+  ingredients: Ingredient[];
+  recipe: string;
+  image: File | null;
+}
+
 export interface RegisterMutation {
   email: string;
   displayName: string;

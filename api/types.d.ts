@@ -15,11 +15,6 @@ export interface Ingredient {
   amount: string;
 }
 
-interface Rating {
-  user: string;
-  rating: number;
-}
-
 export interface CocktailFields {
   name: string;
   ingredients: Ingredient[];
