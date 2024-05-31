@@ -15,7 +15,7 @@ cocktailsRouter.post(
     try {
       const cocktail = new Cocktail({
         name: req.body.name,
-        ingredients: req.body.ingredients,
+        ingredients: JSON.parse(req.body.ingredients),
         recipe: req.body.recipe,
         image: req.file?.filename,
         user: req.user?._id,

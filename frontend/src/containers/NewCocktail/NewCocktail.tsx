@@ -10,14 +10,18 @@ import React, { useState } from 'react';
 import { CocktailMutation } from '../../types';
 import { Delete } from '@mui/icons-material';
 import FileInput from '../../components/FileInput/FileInput';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   selectAddCocktailError,
   selectAddCocktailLoading,
 } from '../../store/cocktails/cocktailsSlice';
 import { LoadingButton } from '@mui/lab';
+import { addCocktail } from '../../store/cocktails/cocktailsThunks';
+import { useNavigate } from 'react-router-dom';
 
 const NewCocktail: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const error = useAppSelector(selectAddCocktailError);
   const loading = useAppSelector(selectAddCocktailLoading);
   const [cocktailForm, setCocktailForm] = useState<CocktailMutation>({
@@ -71,6 +75,15 @@ const NewCocktail: React.FC = () => {
     }));
   };
 
+  const clearCocktailForm = () => {
+    setCocktailForm({
+      name: '',
+      ingredients: [{ name: '', amount: '' }],
+      recipe: '',
+      image: null,
+    });
+  };
+
   const getFieldError = (fieldName: string) => {
     try {
       return error?.errors[fieldName].message;
@@ -79,9 +92,13 @@ const NewCocktail: React.FC = () => {
     }
   };
 
-  const onCocktailFormSubmit = (e: React.FormEvent) => {
+  const onCocktailFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await dispatch(addCocktail(cocktailForm)).unwrap();
+    clearCocktailForm();
+    navigate('/');
   };
+  
   return (
     <Container sx={{ py: 3 }} maxWidth='md'>
       <Typography variant='h4' sx={{ mb: 2 }}>
@@ -102,7 +119,12 @@ const NewCocktail: React.FC = () => {
             />
           </Grid>
           {cocktailForm.ingredients.map((item, index) => (
-            <Grid item xs={12} sx={{ display: 'flex', gap: 2 }} key={index}>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: 'flex', gap: 2, alignItems: 'start' }}
+              key={index}
+            >
               <TextField
                 type='text'
                 name='name'
@@ -112,6 +134,8 @@ const NewCocktail: React.FC = () => {
                 onChange={(e) => ingredientsChangeHandler(e, index)}
                 size='small'
                 sx={{ flexBasis: 1, flexGrow: 2 }}
+                error={Boolean(getFieldError(`ingredients.${index}.name`))}
+                helperText={getFieldError(`ingredients.${index}.name`)}
               />
               <TextField
                 type='text'
@@ -122,6 +146,8 @@ const NewCocktail: React.FC = () => {
                 onChange={(e) => ingredientsChangeHandler(e, index)}
                 size='small'
                 sx={{ flexBasis: 1, flexGrow: 1 }}
+                error={Boolean(getFieldError(`ingredients.${index}.amount`))}
+                helperText={getFieldError(`ingredients.${index}.amount`)}
               />
               {cocktailForm.ingredients.length > 1 && (
                 <Button onClick={() => deleteIngredientInput(index)}>

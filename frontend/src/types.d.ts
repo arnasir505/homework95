@@ -13,10 +13,14 @@ export interface Ingredient {
   amount: string;
 }
 
+interface IngredientWithID extends Ingredient {
+  _id: string;
+}
+
 export interface Cocktail {
   _id: string;
   name: string;
-  ingredients: Ingredient[];
+  ingredients: IngredientWithID[];
   recipe: string;
   image: string;
   user: string;
