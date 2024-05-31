@@ -36,7 +36,7 @@ cocktailsRouter.post(
 
 cocktailsRouter.get('/', async (_req, res, next) => {
   try {
-    const cocktails = await Cocktail.find({ isPublished: true });
+    const cocktails = await Cocktail.find();
     return res.send(cocktails);
   } catch (e) {
     next(e);

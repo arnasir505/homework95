@@ -7,6 +7,7 @@ import NewCocktail from './containers/NewCocktail/NewCocktail';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { useAppSelector } from './app/hooks';
 import { selectUser } from './store/users/usersSlice';
+import Cocktails from './containers/Cocktails/Cocktails';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -18,7 +19,7 @@ const App = () => {
       </header>
       <main>
         <Routes>
-          <Route path='/' element='Home' />
+          <Route path='/' element={<Cocktails />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route

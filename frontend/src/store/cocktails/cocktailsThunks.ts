@@ -27,3 +27,15 @@ export const addCocktail = createAsyncThunk<
     throw e;
   }
 });
+
+export const fetchCocktails = createAsyncThunk<Cocktail[]>(
+  'cocktails/fetchAll',
+  async () => {
+    try {
+      const response = await axiosApi.get<Cocktail[]>('/cocktails');
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+);

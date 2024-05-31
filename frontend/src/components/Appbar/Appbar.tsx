@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 
 const LogoLink = styled(NavLink)({
-  color: '#c70039',
+  color: '#cd0303',
   textDecoration: 'none',
 });
 
