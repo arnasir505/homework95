@@ -114,3 +114,14 @@ export const togglePublish = createAsyncThunk<void, string>(
     }
   },
 );
+
+export const deleteCocktail = createAsyncThunk<void, string>(
+  'cocktails/deleteOne',
+  async (id) => {
+    try {
+      await axiosApi.delete('/cocktails/' + id);
+    } catch (e) {
+      throw e;
+    }
+  },
+);

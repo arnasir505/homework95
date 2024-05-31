@@ -15,6 +15,7 @@ import {
   selectCocktailsLoading,
 } from '../../store/cocktails/cocktailsSlice';
 import {
+  deleteCocktail,
   fetchCocktailsAdmin,
   togglePublish,
 } from '../../store/cocktails/cocktailsThunks';
@@ -35,8 +36,18 @@ const Admin: React.FC = () => {
   const onTogglePublish = async (id: string) => {
     setDisabledBtn(id);
     await dispatch(togglePublish(id));
-    setDisabledBtn('')
+    setDisabledBtn('');
     void getCocktailsAdmin();
+  };
+
+  const onCocktailDelete = async (id: string) => {
+    let adminConfirm = confirm('Delete this cocktail?');
+    if (adminConfirm) {
+      setDisabledBtn(id);
+      await dispatch(deleteCocktail(id));
+      setDisabledBtn('');
+      void getCocktailsAdmin();
+    }
   };
 
   useEffect(() => {
@@ -93,7 +104,10 @@ const Admin: React.FC = () => {
                 >
                   Unpublish
                 </LoadingButton>
-                <LoadingButton loading={cocktail._id === disabledBtn}>
+                <LoadingButton
+                  onClick={() => onCocktailDelete(cocktail._id)}
+                  loading={cocktail._id === disabledBtn}
+                >
                   Delete
                 </LoadingButton>
               </ButtonGroup>
@@ -142,7 +156,10 @@ const Admin: React.FC = () => {
                 >
                   Publish
                 </LoadingButton>
-                <LoadingButton loading={cocktail._id === disabledBtn}>
+                <LoadingButton
+                  onClick={() => onCocktailDelete(cocktail._id)}
+                  loading={cocktail._id === disabledBtn}
+                >
                   Delete
                 </LoadingButton>
               </ButtonGroup>
