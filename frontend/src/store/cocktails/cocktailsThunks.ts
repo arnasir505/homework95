@@ -80,7 +80,9 @@ export const fetchOneCocktailByUser = createAsyncThunk<Cocktail, string>(
   'cocktails/fetchOne',
   async (id) => {
     try {
-      const response = await axiosApi.get<Cocktail>('/cocktails/' + id + '/byUser');
+      const response = await axiosApi.get<Cocktail>(
+        '/cocktails/' + id + '/byUser',
+      );
       return response.data;
     } catch (e) {
       throw e;
@@ -88,12 +90,25 @@ export const fetchOneCocktailByUser = createAsyncThunk<Cocktail, string>(
   },
 );
 
-export const fetchOneCocktailAdmin= createAsyncThunk<Cocktail, string>(
+export const fetchOneCocktailAdmin = createAsyncThunk<Cocktail, string>(
   'cocktails/fetchOne',
   async (id) => {
     try {
-      const response = await axiosApi.get<Cocktail>('/cocktails/' + id + '/admin');
+      const response = await axiosApi.get<Cocktail>(
+        '/cocktails/' + id + '/admin',
+      );
       return response.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+);
+
+export const togglePublish = createAsyncThunk<void, string>(
+  'cocktails/togglePublish',
+  async (id) => {
+    try {
+      await axiosApi.patch('/cocktails/' + id + '/togglePublished');
     } catch (e) {
       throw e;
     }
