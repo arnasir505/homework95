@@ -108,6 +108,27 @@ cocktailsRouter.get(
   },
 );
 
+cocktailsRouter.get(
+  '/:id/admin',
+  auth,
+  permit('admin'),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      if (!mongoose.Types.ObjectId.isValid(id.toString())) {
+        return res.status(422).send({ error: 'Invalid cocktail id!' });
+      }
+      const cocktail = await Cocktail.findOne({ _id: id });
+      if (!cocktail) {
+        return res.status(404).send({ error: 'Not Found!' });
+      }
+      return res.send(cocktail);
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
 cocktailsRouter.patch(
   '/:id/togglePublished',
   auth,

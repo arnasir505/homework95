@@ -33,6 +33,14 @@ const App = () => {
             }
           />
           <Route
+            path='/cocktails/:id/admin'
+            element={
+              <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                <OneCocktail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path='/my-cocktails'
             element={
               <ProtectedRoute isAllowed={user && roles.includes(user.role)}>

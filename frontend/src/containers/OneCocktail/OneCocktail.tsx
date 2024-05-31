@@ -13,12 +13,16 @@ import {
   selectCocktailsLoading,
   selectOneCocktail,
 } from '../../store/cocktails/cocktailsSlice';
-import { fetchOneCocktail, fetchOneCocktailByUser } from '../../store/cocktails/cocktailsThunks';
+import {
+  fetchOneCocktail,
+  fetchOneCocktailAdmin,
+  fetchOneCocktailByUser,
+} from '../../store/cocktails/cocktailsThunks';
 import { apiUrl } from '../../constants';
 
 const OneCocktail: React.FC = () => {
   const params = useParams();
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const cocktail = useAppSelector(selectOneCocktail);
   const loading = useAppSelector(selectCocktailsLoading);
@@ -27,6 +31,8 @@ const OneCocktail: React.FC = () => {
     if (params.id) {
       if (pathname.includes('byUser')) {
         await dispatch(fetchOneCocktailByUser(params.id));
+      } else if (pathname.includes('admin')) {
+        await dispatch(fetchOneCocktailAdmin(params.id));
       } else {
         await dispatch(fetchOneCocktail(params.id));
       }

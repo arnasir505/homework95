@@ -41,10 +41,22 @@ export const fetchCocktails = createAsyncThunk<Cocktail[]>(
 );
 
 export const fetchUserCocktails = createAsyncThunk<Cocktail[]>(
-  'cocktails/fetchUsersAll',
+  'cocktails/fetchAll',
   async () => {
     try {
       const response = await axiosApi.get<Cocktail[]>('/cocktails/byUser');
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+);
+
+export const fetchCocktailsAdmin = createAsyncThunk<Cocktail[]>(
+  'cocktails/fetchAll',
+  async () => {
+    try {
+      const response = await axiosApi.get<Cocktail[]>('/cocktails/admin');
       return response.data;
     } catch (e) {
       throw e;
@@ -76,11 +88,11 @@ export const fetchOneCocktailByUser = createAsyncThunk<Cocktail, string>(
   },
 );
 
-export const fetchCocktailsAdmin = createAsyncThunk<Cocktail[]>(
-  'cocktails/fetchAllAdmin',
-  async () => {
+export const fetchOneCocktailAdmin= createAsyncThunk<Cocktail, string>(
+  'cocktails/fetchOne',
+  async (id) => {
     try {
-      const response = await axiosApi.get<Cocktail[]>('/cocktails/admin');
+      const response = await axiosApi.get<Cocktail>('/cocktails/' + id + '/admin');
       return response.data;
     } catch (e) {
       throw e;
