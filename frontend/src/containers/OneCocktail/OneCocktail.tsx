@@ -9,7 +9,10 @@ import {
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectCocktailsLoading, selectOneCocktail } from '../../store/cocktails/cocktailsSlice';
+import {
+  selectCocktailsLoading,
+  selectOneCocktail,
+} from '../../store/cocktails/cocktailsSlice';
 import { fetchOneCocktail } from '../../store/cocktails/cocktailsThunks';
 import { apiUrl } from '../../constants';
 
@@ -18,7 +21,7 @@ const OneCocktail: React.FC = () => {
   const dispatch = useAppDispatch();
   const cocktail = useAppSelector(selectOneCocktail);
   const loading = useAppSelector(selectCocktailsLoading);
-  
+
   const getOneCocktail = async () => {
     if (params.id) {
       await dispatch(fetchOneCocktail(params.id));
@@ -77,11 +80,7 @@ const OneCocktail: React.FC = () => {
       </>
     );
   }
-  return (
-    <Container sx={{ py: 5 }}>
-      {content}
-    </Container>
-  );
+  return <Container sx={{ py: 5 }}>{content}</Container>;
 };
 
 export default OneCocktail;

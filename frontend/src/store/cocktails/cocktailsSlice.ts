@@ -5,12 +5,14 @@ import {
   addCocktail,
   fetchCocktails,
   fetchOneCocktail,
+  fetchUserCocktails,
 } from './cocktailsThunks';
 
 interface CocktailsState {
   cocktails: Cocktail[];
   oneCocktail: Cocktail;
   cocktailsLoading: boolean;
+  cocktailError: boolean;
   addCocktailLoading: boolean;
   addCocktailError: ValidationError | null;
 }
@@ -27,6 +29,7 @@ const initialState: CocktailsState = {
     isPublished: false,
   },
   cocktailsLoading: false,
+  cocktailError: false,
   addCocktailLoading: false,
   addCocktailError: null,
 };
@@ -51,6 +54,7 @@ const cocktailsSlice = createSlice({
     builder
       .addCase(fetchCocktails.pending, (state) => {
         state.cocktailsLoading = true;
+        state.cocktailError = false;
       })
       .addCase(fetchCocktails.fulfilled, (state, { payload: cocktails }) => {
         state.cocktailsLoading = false;
@@ -58,10 +62,12 @@ const cocktailsSlice = createSlice({
       })
       .addCase(fetchCocktails.rejected, (state) => {
         state.cocktailsLoading = false;
+        state.cocktailError = true;
       });
     builder
       .addCase(fetchOneCocktail.pending, (state) => {
         state.cocktailsLoading = true;
+        state.cocktailError = false;
       })
       .addCase(fetchOneCocktail.fulfilled, (state, { payload: cocktail }) => {
         state.cocktailsLoading = false;
@@ -69,6 +75,23 @@ const cocktailsSlice = createSlice({
       })
       .addCase(fetchOneCocktail.rejected, (state) => {
         state.cocktailsLoading = false;
+        state.cocktailError = true;
+      });
+    builder
+      .addCase(fetchUserCocktails.pending, (state) => {
+        state.cocktailsLoading = true;
+        state.cocktailError = false;
+      })
+      .addCase(
+        fetchUserCocktails.fulfilled,
+        (state, { payload: userCocktails }) => {
+          state.cocktailsLoading = false;
+          state.cocktails = userCocktails;
+        },
+      )
+      .addCase(fetchUserCocktails.rejected, (state) => {
+        state.cocktailsLoading = false;
+        state.cocktailError = true;
       });
   },
 });
