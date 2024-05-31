@@ -32,7 +32,19 @@ export const fetchCocktails = createAsyncThunk<Cocktail[]>(
   'cocktails/fetchAll',
   async () => {
     try {
-      const response = await axiosApi.get<Cocktail[]>('/cocktails');
+      const response = await axiosApi.get<Cocktail[]>('/cocktails/');
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+);
+
+export const fetchOneCocktail = createAsyncThunk<Cocktail, string>(
+  'cocktails/fetchOne',
+  async (id) => {
+    try {
+      const response = await axiosApi.get<Cocktail>('/cocktails/' + id);
       return response.data;
     } catch (e) {
       throw e;

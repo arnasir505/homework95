@@ -20,9 +20,11 @@ const Cocktails: React.FC = () => {
   const dispatch = useAppDispatch();
   const cocktails = useAppSelector(selectCocktails);
   const loading = useAppSelector(selectCocktailsLoading);
+  
   const getCocktails = async () => {
     await dispatch(fetchCocktails());
   };
+
   useEffect(() => {
     void getCocktails();
   }, []);
@@ -45,7 +47,7 @@ const Cocktails: React.FC = () => {
             <Card sx={{ p: 1, backgroundColor: '#fff9f1', height: '100%' }}>
               <img
                 src={apiUrl + '/' + cocktail.image}
-                alt='Cocktail image'
+                alt={cocktail.name}
                 style={{
                   width: '100%',
                   height: 'auto',

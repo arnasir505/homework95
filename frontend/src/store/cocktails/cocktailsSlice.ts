@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Cocktail, ValidationError } from '../../types';
 import { RootState } from '../../app/store';
-import { addCocktail, fetchCocktails } from './cocktailsThunks';
+import {
+  addCocktail,
+  fetchCocktails,
+  fetchOneCocktail,
+} from './cocktailsThunks';
 
 interface CocktailsState {
   cocktails: Cocktail[];
+  oneCocktail: Cocktail;
   cocktailsLoading: boolean;
   addCocktailLoading: boolean;
   addCocktailError: ValidationError | null;
@@ -12,6 +17,15 @@ interface CocktailsState {
 
 const initialState: CocktailsState = {
   cocktails: [],
+  oneCocktail: {
+    _id: '',
+    name: '',
+    ingredients: [],
+    recipe: '',
+    image: '',
+    user: '',
+    isPublished: false,
+  },
   cocktailsLoading: false,
   addCocktailLoading: false,
   addCocktailError: null,
@@ -45,11 +59,25 @@ const cocktailsSlice = createSlice({
       .addCase(fetchCocktails.rejected, (state) => {
         state.cocktailsLoading = false;
       });
+    builder
+      .addCase(fetchOneCocktail.pending, (state) => {
+        state.cocktailsLoading = true;
+      })
+      .addCase(fetchOneCocktail.fulfilled, (state, { payload: cocktail }) => {
+        state.cocktailsLoading = false;
+        state.oneCocktail = cocktail;
+      })
+      .addCase(fetchOneCocktail.rejected, (state) => {
+        state.cocktailsLoading = false;
+      });
   },
 });
 
 export const selectCocktails = (state: RootState) => state.cocktails.cocktails;
-export const selectCocktailsLoading = (state: RootState) => state.cocktails.cocktailsLoading;
+export const selectOneCocktail = (state: RootState) =>
+  state.cocktails.oneCocktail;
+export const selectCocktailsLoading = (state: RootState) =>
+  state.cocktails.cocktailsLoading;
 export const selectAddCocktailLoading = (state: RootState) =>
   state.cocktails.addCocktailLoading;
 export const selectAddCocktailError = (state: RootState) =>
