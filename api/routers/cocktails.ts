@@ -43,16 +43,19 @@ cocktailsRouter.get('/', async (_req, res, next) => {
   }
 });
 
-cocktailsRouter.get('/byUser', auth, async (req, res, next) => {
-  try {
-    const userID = req.query.user;
-    if (!userID) return res.status(400).send({ error: 'User id is required.' });
-    const cocktailsByUser = await Cocktail.find({ user: userID.toString() });
-    return res.send(cocktailsByUser);
-  } catch (e) {
-    next(e);
-  }
-});
+cocktailsRouter.get(
+  '/byUser',
+  auth,
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const userID = req.user?._id;
+      const cocktailsByUser = await Cocktail.find({ user: userID });
+      return res.send(cocktailsByUser);
+    } catch (e) {
+      next(e);
+    }
+  },
+);
 
 cocktailsRouter.get(
   '/admin',
@@ -74,15 +77,36 @@ cocktailsRouter.get('/:id', async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id.toString())) {
       return res.status(422).send({ error: 'Invalid cocktail id!' });
     }
-    const cocktail = await Cocktail.findOne({ _id: id });
+    const cocktail = await Cocktail.findOne({ _id: id, isPublished: true });
     if (!cocktail) {
-      return res.status(404).send({error: 'Not Found!'})
+      return res.status(404).send({ error: 'Not Found!' });
     }
     return res.send(cocktail);
   } catch (e) {
     next(e);
   }
 });
+
+cocktailsRouter.get(
+  '/:id/byUser',
+  auth,
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const id = req.params.id;
+      const userID = req.user?._id;
+      if (!mongoose.Types.ObjectId.isValid(id.toString())) {
+        return res.status(422).send({ error: 'Invalid cocktail id!' });
+      }
+      const cocktail = await Cocktail.findOne({ _id: id, user: userID });
+      if (!cocktail) {
+        return res.status(404).send({ error: 'Not Found!' });
+      }
+      return res.send(cocktail);
+    } catch (e) {
+      next(e);
+    }
+  },
+);
 
 cocktailsRouter.patch(
   '/:id/togglePublished',

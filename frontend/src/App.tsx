@@ -10,6 +10,7 @@ import { selectUser } from './store/users/usersSlice';
 import Cocktails from './containers/Cocktails/Cocktails';
 import OneCocktail from './containers/OneCocktail/OneCocktail';
 import UserCocktails from './containers/UserCocktails/UserCocktails';
+import Admin from './containers/Admin/Admin';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -24,6 +25,14 @@ const App = () => {
           <Route path='/' element={<Cocktails />} />
           <Route path='/cocktails/:id' element={<OneCocktail />} />
           <Route
+            path='/cocktails/:id/byUser'
+            element={
+              <ProtectedRoute isAllowed={user && roles.includes(user.role)}>
+                <OneCocktail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path='/my-cocktails'
             element={
               <ProtectedRoute isAllowed={user && roles.includes(user.role)}>
@@ -31,8 +40,6 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path='/register' element={<Register />} />
-          <Route path='/login' element={<Login />} />
           <Route
             path='/cocktails/new'
             element={
@@ -41,6 +48,16 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path='/admin'
+            element={
+              <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
           <Route
             path='*'
             element={

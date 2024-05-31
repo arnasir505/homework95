@@ -7,24 +7,29 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   selectCocktailsLoading,
   selectOneCocktail,
 } from '../../store/cocktails/cocktailsSlice';
-import { fetchOneCocktail } from '../../store/cocktails/cocktailsThunks';
+import { fetchOneCocktail, fetchOneCocktailByUser } from '../../store/cocktails/cocktailsThunks';
 import { apiUrl } from '../../constants';
 
 const OneCocktail: React.FC = () => {
   const params = useParams();
+  const {pathname} = useLocation();
   const dispatch = useAppDispatch();
   const cocktail = useAppSelector(selectOneCocktail);
   const loading = useAppSelector(selectCocktailsLoading);
 
   const getOneCocktail = async () => {
     if (params.id) {
-      await dispatch(fetchOneCocktail(params.id));
+      if (pathname.includes('byUser')) {
+        await dispatch(fetchOneCocktailByUser(params.id));
+      } else {
+        await dispatch(fetchOneCocktail(params.id));
+      }
     }
   };
 

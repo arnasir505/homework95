@@ -4,6 +4,7 @@ import { RootState } from '../../app/store';
 import {
   addCocktail,
   fetchCocktails,
+  fetchCocktailsAdmin,
   fetchOneCocktail,
   fetchUserCocktails,
 } from './cocktailsThunks';
@@ -90,6 +91,22 @@ const cocktailsSlice = createSlice({
         },
       )
       .addCase(fetchUserCocktails.rejected, (state) => {
+        state.cocktailsLoading = false;
+        state.cocktailError = true;
+      });
+    builder
+      .addCase(fetchCocktailsAdmin.pending, (state) => {
+        state.cocktailsLoading = true;
+        state.cocktailError = false;
+      })
+      .addCase(
+        fetchCocktailsAdmin.fulfilled,
+        (state, { payload: cocktails }) => {
+          state.cocktailsLoading = false;
+          state.cocktails = cocktails;
+        },
+      )
+      .addCase(fetchCocktailsAdmin.rejected, (state) => {
         state.cocktailsLoading = false;
         state.cocktailError = true;
       });

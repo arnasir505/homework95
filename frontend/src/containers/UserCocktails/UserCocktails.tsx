@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { apiUrl } from '../../constants';
+import { Link } from 'react-router-dom';
 
 const UserCocktails: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -44,29 +45,36 @@ const UserCocktails: React.FC = () => {
         </Typography>
         <Grid container sx={{ display: 'flex', gap: 2 }}>
           {cocktails.map((cocktail) => (
-            <Card
-              sx={{
+            <Link
+              to={`/cocktails/${cocktail._id}/byUser`}
+              style={{
+                textDecoration: 'none',
                 display: cocktail.isPublished ? 'block' : 'none',
-                p: 1,
-                backgroundColor: '#fff9f1',
-                height: '100%',
               }}
               key={cocktail._id}
             >
-              <img
-                src={apiUrl + '/' + cocktail.image}
-                alt={cocktail.name}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  maxHeight: '169px',
-                  objectFit: 'cover',
+              <Card
+                sx={{
+                  p: 1,
+                  backgroundColor: '#fff9f1',
+                  height: '100%',
                 }}
-              />
-              <Typography variant='h5' sx={{ textAlign: 'center' }}>
-                {cocktail.name}
-              </Typography>
-            </Card>
+              >
+                <img
+                  src={apiUrl + '/' + cocktail.image}
+                  alt={cocktail.name}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    maxHeight: '169px',
+                    objectFit: 'cover',
+                  }}
+                />
+                <Typography variant='h5' sx={{ textAlign: 'center' }}>
+                  {cocktail.name}
+                </Typography>
+              </Card>
+            </Link>
           ))}
         </Grid>
         <Divider sx={{ mt: 3 }} />
@@ -75,29 +83,36 @@ const UserCocktails: React.FC = () => {
         </Typography>
         <Grid container sx={{ display: 'flex', gap: 2 }}>
           {cocktails.map((cocktail) => (
-            <Card
-              sx={{
+            <Link
+              to={`/cocktails/${cocktail._id}/byUser`}
+              style={{
+                textDecoration: 'none',
                 display: cocktail.isPublished ? 'none' : 'block',
-                p: 1,
-                backgroundColor: '#fff9f1',
-                height: '100%',
               }}
               key={cocktail._id}
             >
-              <img
-                src={apiUrl + '/' + cocktail.image}
-                alt={cocktail.name}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  maxHeight: '169px',
-                  objectFit: 'cover',
+              <Card
+                sx={{
+                  p: 1,
+                  backgroundColor: '#fff9f1',
+                  height: '100%',
                 }}
-              />
-              <Typography variant='h5' sx={{ textAlign: 'center' }}>
-                {cocktail.name}
-              </Typography>
-            </Card>
+              >
+                <img
+                  src={apiUrl + '/' + cocktail.image}
+                  alt={cocktail.name}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    maxHeight: '169px',
+                    objectFit: 'cover',
+                  }}
+                />
+                <Typography variant='h5' sx={{ textAlign: 'center' }}>
+                  {cocktail.name}
+                </Typography>
+              </Card>
+            </Link>
           ))}
         </Grid>
       </>

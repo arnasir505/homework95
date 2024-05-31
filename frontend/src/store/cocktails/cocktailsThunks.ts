@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Cocktail, CocktailMutation, ValidationError } from '../../types';
 import { isAxiosError } from 'axios';
 import axiosApi from '../../axiosApi';
-import { RootState } from '../../app/store';
 
 export const addCocktail = createAsyncThunk<
   Cocktail,
@@ -41,27 +40,47 @@ export const fetchCocktails = createAsyncThunk<Cocktail[]>(
   },
 );
 
-export const fetchUserCocktails = createAsyncThunk<
-  Cocktail[],
-  void,
-  { state: RootState }
->('cocktails/fetchUsersAll', async (_, { getState }) => {
-  try {
-    const userID = getState().users.user?._id;
-    const response = await axiosApi.get<Cocktail[]>(
-      '/cocktails/byUser?user=' + userID,
-    );
-    return response.data;
-  } catch (e) {
-    throw e;
-  }
-});
+export const fetchUserCocktails = createAsyncThunk<Cocktail[]>(
+  'cocktails/fetchUsersAll',
+  async () => {
+    try {
+      const response = await axiosApi.get<Cocktail[]>('/cocktails/byUser');
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+);
 
 export const fetchOneCocktail = createAsyncThunk<Cocktail, string>(
   'cocktails/fetchOne',
   async (id) => {
     try {
       const response = await axiosApi.get<Cocktail>('/cocktails/' + id);
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+);
+
+export const fetchOneCocktailByUser = createAsyncThunk<Cocktail, string>(
+  'cocktails/fetchOne',
+  async (id) => {
+    try {
+      const response = await axiosApi.get<Cocktail>('/cocktails/' + id + '/byUser');
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+);
+
+export const fetchCocktailsAdmin = createAsyncThunk<Cocktail[]>(
+  'cocktails/fetchAllAdmin',
+  async () => {
+    try {
+      const response = await axiosApi.get<Cocktail[]>('/cocktails/admin');
       return response.data;
     } catch (e) {
       throw e;
